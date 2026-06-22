@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Detalhe do Feedback — Fale Fácil{% endblock %}
+
+{% block content %}
+<div class="form-page">
+  <div class="form-header">
+    <a href="{{ url_for('index') }}" class="back-link">← Voltar</a>
+    <h2>Detalhe do Feedback</h2>
+  </div>
+
+  <article class="feedback-card feedback-detalhe">
+    <header class="card-header">
+      <span class="tag tag-cat tag-{{ feedback.categoria | lower | replace('ã','a') | replace('ç','c') }}">
+        {{ feedback.categoria }}
+      </span>
+      <span class="tag tag-prio tag-prio-{{ feedback.prioridade | lower }}">
+        {{ feedback.prioridade }}
+      </span>
+      <span class="tag tag-status status-{{ feedback.status | lower | replace(' ','_') }}">
+        {{ feedback.status }}
+      </span>
+    </header>
+
+    <h3 class="card-title">{{ feedback.titulo }}</h3>
+
+    <div class="card-meta">
+      {% if feedback.funcionario == 'Anônimo' %}
+        <span class="meta-anonimo">🔒 Anônimo</span>
+      {% else %}
+        <span class="meta-name">{{ feedback.funcionario }}</span>
+        <span class="meta-dept">{{ feedback.departamento }}</span>
+      {% endif %}
+    </div>
+
+    <div class="field field-full">
+      <label>Descrição</label>
+      <p class="card-descricao-completa">{{ feedback.descricao }}</p>
+    </div>
+
+    <div class="form-grid">
+      <div class="field">
+        <label>Criado em</label>
+        <p>{{ feedback.criado_em.strftime('%d/%m/%Y %H:%M') }}</p>
+      </div>
+      <div class="field">
+        <label>Última atualização</label>
+        <p>{{ feedback.atualizado_em.strftime('%d/%m/%Y %H:%M') }}</p>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <a href="{{ url_for('index') }}" class="btn btn-ghost">Voltar</a>
+      <a href="{{ url_for('editar_feedback', id=feedback.id) }}" class="btn btn-primary">Editar Feedback</a>
+    </div>
+  </article>
+</div>
+{% endblock %}

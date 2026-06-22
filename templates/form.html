@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}{% if modo == 'editar' %}Editar{% else %}Novo{% endif %} Feedback — Fale Fácil{% endblock %}
+
+{% block content %}
+<div class="form-page">
+  <div class="form-header">
+    <a href="{{ url_for('index') }}" class="back-link">← Voltar</a>
+    <h2>{% if modo == 'editar' %}Editar Feedback{% else %}Novo Feedback{% endif %}</h2>
+  </div>
+
+  <form method="POST" class="feedback-form">
+
+    <!-- Opção de anonimato -->
+    <div class="anonimo-box">
+      <label class="anonimo-label">
+        <input type="checkbox" id="anonimo" name="anonimo" value="1"
+               {% if dados.get('anonimo') == '1' %}checked{% endif %}
+               onchange="toggleAnonimo(this)" />
+        <span class="anonimo-check"></span>
+        Enviar feedback de forma <strong>anônima</strong>
+      </label>
+      <p class="anonimo-hint">Seu nome e departamento não serão exibidos.</p>
+    </div>
+
+    <!-- Campos de identificação (ocultos se anônimo) -->
+    <div class="form-grid" id="campos-identificacao">
+
+      <div class="field">
+        <label for="funcionario">Funcionário *</label>
+        <input type="text" id="funcionario" name="funcionario"
+               value="{{ dados.get('funcionario', '') }}" placeholder="Nome completo" />
+      </div>
+
+      <div class="field">
+        <label for="departamento">Departamento *</label>
+        <input type="text" id="departamento" name="departamento"
+               value="{{ dados.get('departamento', '') }}" placeholder="Ex: TI, RH, Financeiro..." />
+      </div>
+
+    </div>
+
+    <div class="form-grid">
+
+      <div class="field">
+        <label for="categoria">Categoria *</label>
+        <select id="categoria" name="categoria" required>
+          <option value="" disabled {% if not dados.get('categoria') %}selected{% endif %}>Selecione...</option>
+          {% for cat in ['Sugestao','Reclamacao','Elogio','Melhoria','Outro'] %}
+            <option value="{{ cat }}" {% if dados.get('categoria') == cat %}selected{% endif %}>{{ cat }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="prioridade">Prioridade</label>
+        <select id="prioridade" name="prioridade">
+          {% for p in ['Baixa','Media','Alta','Urgente'] %}
+            <option value="{{ p }}" {% if dados.get('prioridade', 'Media') == p %}selected{% endif %}>{{ p }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      {% if modo == 'editar' %}
+      <div class="field">
+        <label for="status">Status</label>
+        <select id="status" name="status">
+          {% for s in ['Pendente','Em Analise','Resolvido'] %}
+            <option value="{{ s }}" {% if dados.get('status') == s %}selected{% endif %}>{{ s }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      {% endif %}
+
+    </div>
+
+    <div class="field field-full">
+      <label for="titulo">Título *</label>
+      <input type="text" id="titulo" name="titulo"
+             value="{{ dados.get('titulo', '') }}" placeholder="Resumo breve do feedback" required />
+    </div>
+
+    <div class="field field-full">
+      <label for="descricao">Descrição *</label>
+      <textarea id="descricao" name="descricao" rows="6"
+                placeholder="Descreva o feedback com detalhes..." required>{{ dados.get('descricao', '') }}</textarea>
+    </div>
+
+    <div class="form-actions">
+      <a href="{{ url_for('index') }}" class="btn btn-ghost">Cancelar</a>
+      <button type="submit" class="btn btn-primary">
+        {% if modo == 'editar' %}Salvar Alterações{% else %}Cadastrar Feedback{% endif %}
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock %}
