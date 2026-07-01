@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block title %}Início — Fale Fácil{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <!-- Hero -->
+  <div class="dash-hero">
+    <p class="greeting">Olá, <strong>{{ session.get('nome', '').split()[0] }}</strong></p>
+    <h1>Seu feedback<br>faz a <em>diferença.</em></h1>
+    <p>Envie seus feedbacks e acompanhe o andamento das suas solicitações.</p>
+  </div>
+
+  <!-- Botão enviar (só funcionário) -->
+  {% if session.get('perfil') != 'admin' %}
+  <a href="{{ url_for('novo_feedback') }}" class="btn-send">
+    + Enviar feedback
+  </a>
+  {% endif %}
+
+  <!-- Flash -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="flash flash-{{ category }}" style="margin-bottom:1rem;">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <!-- Stats admin -->
+  {% if session.get('perfil') == 'admin' %}
+  <div class="stats-grid" style="margin-bottom:1.5rem;">
+    <div class="stat-card stat-total">
+      <span class="stat-number">{{ stats.total }}</span>
+      <span class="stat-label">Total</span>
+    </div>
+    <div class="stat-card stat-pendente">
+      <span class="stat-number">{{ stats.pendentes }}</span>
+      <span class="stat-label">Pendentes</span>
+    </div>
+    <div class="stat-card stat-analise">
+      <span class="stat-number">{{ stats.resolvidos }}</span>
+      <span class="stat-label">Resolvidos</span>
+    </div>
+    <div class="stat-card stat-hoje">
+      <span class="stat-number">{{ stats.hoje }}</span>
+      <span class="stat-label">Hoje</span>
+    </div>
+  </div>
+
+  <!-- Filtros admin -->
+  <div class="filters-bar">
+    <form method="GET" action="/" class="filters-form">
+      <input type="text" name="filtro" class="input-search" placeholder="Buscar..." value="{{ filtro }}" />
+      <select name="categoria" class="input-select">
+        <option value="">Todas</option>
+        {% for cat in ['Sugestao','Reclamacao','Elogio','Melhoria','Outro'] %}
+          <option value="{{ cat }}" {% if categoria == cat %}selected{% endif %}>{{ cat }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit" class="btn btn-primary btn-sm">Filtrar</button>
+      {% if filtro or categoria %}
+        <a href="/" class="btn btn-ghost btn-sm">Limpar</a>
+      {% endif %}
+    </form>
+  </div>
+  {% endif %}
+
+  <!-- Lista de feedbacks -->
+  <h2 class="section-title">
+    {% if session.get('perfil') == 'admin' %}Todos os feedbacks{% else %}Meus feedbacks{% endif %}
+  </h2>
+
+  {% if feedbacks %}
+  <div class="feedback-list">
+    {% for fb in feedbacks %}
+    <a href="{{ url_for('detalhe_feedback', id=fb.id) }}" class="feedback-item">
+      <div class="item-tags">
+        <span class="tag tag-{{ fb.categoria | lower }}">{{ fb.categoria }}</span>
+        <span class="tag tag-prio-{{ fb.prioridade | lower }}">{{ fb.prioridade }}</span>
+      </div>
+
+      <div class="item-title">{{ fb.titulo }}</div>
+      <div class="item-preview">{{ fb.descricao[:100] }}{% if fb.descricao | length > 100 %}…{% endif %}</div>
+
+      <div class="item-footer">
+        <span class="item-date">📅 {{ fb.criado_em.strftime('%d/%m/%Y às %H:%M') }}</span>
+        <span class="status-pill status-{{ fb.status | lower | replace(' ','_') }}">
+          {{ fb.status }}
+        </span>
+      </div>
+
+      {% if session.get('perfil') == 'admin' %}
+      <div style="margin-top:.25rem;">
+        <select class="status-select status-{{ fb.status | lower | replace(' ','_') }}"
+                data-id="{{ fb.id }}" onchange="atualizarStatus(this)" onclick="event.preventDefault()">
+          <option {% if fb.status == 'Pendente' %}selected{% endif %}>Pendente</option>
+          <option {% if fb.status == 'Em Analise' %}selected{% endif %}>Em Analise</option>
+          <option {% if fb.status == 'Resolvido' %}selected{% endif %}>Resolvido</option>
+        </select>
+        {% if fb.anonimo %}
+          <span class="meta-anonimo">🔒 Anônimo</span>
+        {% endif %}
+      </div>
+      {% endif %}
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div style="text-align:center; padding:3rem 1rem; color:var(--text-muted);">
+    <div style="font-size:3rem; margin-bottom:1rem;">💬</div>
+    <p style="margin-bottom:1.5rem;">Nenhum feedback ainda.</p>
+    <a href="{{ url_for('novo_feedback') }}" class="btn-send" style="max-width:280px; margin:0 auto;">
+      + Enviar primeiro feedback
+    </a>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

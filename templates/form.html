@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% if modo == 'editar' %}Editar{% else %}Enviar{% endif %} Feedback — Fale Fácil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+
+  <!-- Topbar -->
+  <div class="form-topbar">
+    <a href="{{ url_for('index') }}" class="back-btn">←</a>
+    <span class="form-topbar-title">{% if modo == 'editar' %}Editar feedback{% else %}Enviar feedback{% endif %}</span>
+  </div>
+
+  <!-- Hero -->
+  <div class="form-hero">
+    <a href="{{ url_for('index') }}" class="back-link" style="display:inline-flex; align-items:center; gap:.4rem; margin-bottom:.75rem; font-size:.875rem;">← Voltar</a>
+    <h2>Sua opinião<br>faz a <em>diferença.</em></h2>
+    <p>Compartilhe sua experiência, sugestão, dúvida ou reclamação.</p>
+  </div>
+
+  <!-- Flash -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div style="padding:0 1.25rem; max-width:480px; margin:0 auto;">
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- Formulário -->
+  <form method="POST" class="feedback-form">
+
+    <!-- Anônimo -->
+    <label class="anonimo-box">
+      <input type="checkbox" id="anonimo" name="anonimo" value="1"
+             {% if dados.get('anonimo') %}checked{% endif %}
+             onchange="toggleAnonimo(this)" />
+      <div class="anonimo-checkbox"></div>
+      <div class="anonimo-text">
+        <p>Enviar feedback de forma <em>anônima</em></p>
+        <span>Seu nome departamento não serão exibidos.</span>
+      </div>
+    </label>
+
+    <!-- Identificação -->
+    <div id="campos-identificacao">
+      <div class="field" style="margin-bottom:1.1rem;">
+        <label>Funcionário</label>
+        <input type="text" name="funcionario" value="{{ dados.get('funcionario', '') }}" placeholder="Seu nome completo" />
+      </div>
+      <div class="field">
+        <label>Departamento</label>
+        <input type="text" name="departamento" value="{{ dados.get('departamento', '') }}" placeholder="Ex: TI, RH, Financeiro..." />
+      </div>
+    </div>
+
+    <!-- Categoria -->
+    <div class="field">
+      <label>Categoria <span class="req">*</span></label>
+      <select name="categoria" required>
+        <option value="" disabled {% if not dados.get('categoria') %}selected{% endif %}>Selecionar uma categoria</option>
+        {% for cat in ['Sugestao','Reclamacao','Elogio','Melhoria','Outro'] %}
+          <option value="{{ cat }}" {% if dados.get('categoria') == cat %}selected{% endif %}>{{ cat }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- Prioridade -->
+    <div class="field">
+      <label>Propriedade <span class="req">*</span></label>
+      <select name="prioridade">
+        {% for p in ['Baixa','Media','Alta','Urgente'] %}
+          <option value="{{ p }}" {% if dados.get('prioridade', 'Media') == p %}selected{% endif %}>{{ p }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- Status (só admin no modo editar) -->
+    {% if modo == 'editar' and session.get('perfil') == 'admin' %}
+    <div class="field">
+      <label>Status</label>
+      <select name="status">
+        {% for s in ['Pendente','Em Analise','Resolvido'] %}
+          <option value="{{ s }}" {% if dados.get('status') == s %}selected{% endif %}>{{ s }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    {% endif %}
+
+    <!-- Título -->
+    <div class="field">
+      <label>Título <span class="req">*</span></label>
+      <input type="text" name="titulo" value="{{ dados.get('titulo', '') }}"
+             placeholder="Resuma seu feedback em poucas palavras" required />
+    </div>
+
+    <!-- Descrição -->
+    <div class="field">
+      <label>Descrição <span class="req">*</span></label>
+      <textarea name="descricao" placeholder="Descreva seu feedback com mais detalhes" required>{{ dados.get('descricao', '') }}</textarea>
+    </div>
+
+    <button type="submit" class="btn-submit">
+      ➤ {% if modo == 'editar' %}Salvar Alterações{% else %}Enviar Feedback{% endif %}
+    </button>
+
+  </form>
+
+  <!-- Navbar inferior -->
+  <nav class="bottom-nav">
+    <a href="{{ url_for('index') }}" class="nav-item">
+      <span class="nav-icon">🏠</span>
+      <span>Início</span>
+    </a>
+    <a href="{{ url_for('novo_feedback') }}" class="nav-item active">
+      <span class="nav-icon">💬</span>
+      <span>Meus feedbacks</span>
+    </a>
+    <a href="{{ url_for('perfil') }}" class="nav-item">
+      <span class="nav-icon">👤</span>
+      <span>Perfil</span>
+    </a>
+  </nav>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

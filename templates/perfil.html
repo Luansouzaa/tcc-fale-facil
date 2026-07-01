@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Meu Perfil — Fale Fácil{% endblock %}
+
+{% block content %}
+
+<div class="perfil-header">
+  <h2>Meu <em>perfil</em></h2>
+  <p>Veja e gerencie suas informações de conta.</p>
+</div>
+
+<div class="perfil-fields">
+
+  <div class="perfil-field">
+    <div class="perfil-field-icon">👤</div>
+    <div>
+      <div class="perfil-field-label">Nome</div>
+      <div class="perfil-field-value">{{ usuario.nome }}</div>
+    </div>
+  </div>
+
+  <div class="perfil-field">
+    <div class="perfil-field-icon">✉️</div>
+    <div>
+      <div class="perfil-field-label">E-mail</div>
+      <div class="perfil-field-value">{{ usuario.email }}</div>
+    </div>
+  </div>
+
+  <div class="perfil-field">
+    <div class="perfil-field-icon">🔒</div>
+    <div>
+      <div class="perfil-field-label">Senha</div>
+      <div class="perfil-field-value">••••••••••</div>
+    </div>
+  </div>
+
+  <div class="perfil-field">
+    <div class="perfil-field-icon">🏷️</div>
+    <div>
+      <div class="perfil-field-label">Perfil</div>
+      <div class="perfil-field-value">{{ 'Administrador' if usuario.perfil == 'admin' else 'Funcionário' }}</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="perfil-info">
+  <div class="perfil-info-box">
+    🔐 Seus dados são protegidos e utilizados apenas para melhorar sua experiência.
+  </div>
+</div>
+
+<div style="padding:1.25rem; max-width:480px; margin:0 auto;">
+  <a href="{{ url_for('logout') }}" class="btn-submit" style="background:#1e3a5f; box-shadow:none;">
+    Sair da conta
+  </a>
+</div>
+
+{% endblock %}

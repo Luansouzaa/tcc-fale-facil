@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feedback Enviado — Fale Fácil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+  <div class="success-page">
+
+    <div class="success-icon">✅</div>
+
+    <h2>Feedback enviado<br><em>Com sucesso!</em></h2>
+    <p>Obrigado por compartilhar sua opinião.<br>Sua mensagem faz a diferença.</p>
+
+    <div class="success-resumo">
+      <h4>Resumo do seu feedback</h4>
+
+      <div class="resumo-item">
+        <div class="resumo-icon" style="background:rgba(37,99,235,.15);">📝</div>
+        <div>
+          <div class="ri-label">Título</div>
+          <div class="ri-value">{{ feedback.titulo }}</div>
+        </div>
+      </div>
+
+      <div class="resumo-item">
+        <div class="resumo-icon" style="background:rgba(239,68,68,.15);">🏷️</div>
+        <div>
+          <div class="ri-label">Categoria</div>
+          <div class="ri-value">{{ feedback.categoria }}</div>
+        </div>
+      </div>
+
+      <div class="resumo-item">
+        <div class="resumo-icon" style="background:rgba(34,197,94,.15);">⚡</div>
+        <div>
+          <div class="ri-label">Prioridade</div>
+          <div class="ri-value">{{ feedback.prioridade }}</div>
+        </div>
+      </div>
+
+      <div class="resumo-item">
+        <div class="resumo-icon" style="background:rgba(245,158,11,.15);">🕐</div>
+        <div>
+          <div class="ri-label">Status</div>
+          <div class="ri-value">{{ feedback.status }}</div>
+        </div>
+      </div>
+    </div>
+
+    <a href="{{ url_for('index') }}" class="btn-ver">Ver meus feedbacks</a>
+    <a href="{{ url_for('novo_feedback') }}" class="btn-outro">Enviar outro feedback</a>
+
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="{{ url_for('index') }}" class="nav-item active">
+      <span class="nav-icon">🏠</span>
+      <span>Início</span>
+    </a>
+    <a href="{{ url_for('novo_feedback') }}" class="nav-item">
+      <span class="nav-icon">💬</span>
+      <span>Meus feedbacks</span>
+    </a>
+    <a href="{{ url_for('perfil') }}" class="nav-item">
+      <span class="nav-icon">👤</span>
+      <span>Perfil</span>
+    </a>
+  </nav>
+</body>
+</html>

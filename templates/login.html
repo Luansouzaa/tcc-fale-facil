@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — Fale Fácil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body class="login-page">
+
+  <!-- Hero azul escuro -->
+  <div class="login-hero">
+    <div class="login-logo">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="24" cy="24" r="23" fill="#277CFF" opacity="0.2" stroke="#277CFF" stroke-width="1.5"/>
+        <circle cx="24" cy="24" r="16" fill="#061E4F" stroke="#277CFF" stroke-width="2"/>
+        <path d="M17 24l5 5 9-10" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="30" y="30" width="13" height="9" rx="3" fill="#277CFF"/>
+        <circle cx="34" cy="34.5" r="1.2" fill="white"/>
+        <circle cx="36.5" cy="34.5" r="1.2" fill="white"/>
+        <circle cx="39" cy="34.5" r="1.2" fill="white"/>
+      </svg>
+      <span>Fale Fácil</span>
+    </div>
+    <h2>Faça login para continuar</h2>
+    <p>Gerencie os feedbacks da sua empresa.</p>
+
+    <!-- Ilustração visível no desktop -->
+    <div class="login-hero-img">
+      <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="100" cy="100" r="80" fill="#277CFF" opacity="0.1" stroke="#277CFF" stroke-width="2"/>
+        <circle cx="100" cy="100" r="55" fill="#061E4F" stroke="#277CFF" stroke-width="3"/>
+        <path d="M78 100l15 15 30-30" stroke="#22c55e" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="128" y="128" width="42" height="28" rx="8" fill="#277CFF"/>
+        <circle cx="139" cy="142" r="4" fill="white"/>
+        <circle cx="150" cy="142" r="4" fill="white"/>
+        <circle cx="161" cy="142" r="4" fill="white"/>
+        <circle cx="30" cy="40" r="4" fill="#277CFF" opacity="0.6"/>
+        <circle cx="170" cy="60" r="6" fill="#277CFF" opacity="0.4"/>
+        <circle cx="160" cy="30" r="3" fill="white" opacity="0.4"/>
+        <circle cx="40" cy="160" r="5" fill="#277CFF" opacity="0.5"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Card branco -->
+  <div class="login-card">
+    <div style="text-align:center; margin-bottom:1.5rem;">
+      <div class="login-shield">🛡️</div>
+      <span class="login-badge">Acesso corporativo seguro</span>
+      <h1>Entre na sua conta</h1>
+      <p>use suas credenciais corporativas para acessar.</p>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div style="padding:.75rem 1rem; border-radius:8px; margin-bottom:1rem; font-size:.875rem;
+            background:{% if category=='erro' %}#fee2e2{% else %}#dbeafe{% endif %};
+            color:{% if category=='erro' %}#dc2626{% else %}#1d4ed8{% endif %};">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" class="login-form">
+      <div class="field-login">
+        <label>E-mail Corporativo</label>
+        <div class="input-wrap">
+          <span class="input-icon">✉️</span>
+          <input type="email" name="email" placeholder="seu@empresa.com" required autofocus />
+        </div>
+      </div>
+      <div class="field-login">
+        <label>Senha</label>
+        <div class="input-wrap">
+          <span class="input-icon">🔒</span>
+          <input type="password" name="senha" placeholder="••••••••" required />
+        </div>
+      </div>
+      <div class="remember-row">
+        <input type="checkbox" id="lembrar" name="lembrar" />
+        <label for="lembrar">Lembrar meu acesso</label>
+      </div>
+      <button type="submit" class="btn-login">➜ Entrar</button>
+    </form>
+
+    <div class="login-footer">
+      Não tem acesso? <strong>Fale com o administrador</strong>
+    </div>
+  </div>
+
+</body>
+</html>

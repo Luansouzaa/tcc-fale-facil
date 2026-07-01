@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Usuários — Fale Fácil{% endblock %}
+
+{% block content %}
+<div class="form-page">
+  <div class="form-header">
+    <a href="{{ url_for('index') }}" class="back-link">← Voltar</a>
+    <h2>Usuários</h2>
+    <a href="{{ url_for('novo_usuario') }}" class="btn btn-primary btn-sm">+ Novo</a>
+  </div>
+
+  <div class="table-wrapper">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Email</th>
+          <th>Perfil</th>
+          <th>Cadastrado</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for u in usuarios %}
+        <tr>
+          <td>{{ u.nome }}</td>
+          <td>{{ u.email }}</td>
+          <td>
+            <span class="status-pill {% if u.perfil == 'admin' %}status-resolvido{% else %}status-em_analise{% endif %}">
+              {{ 'Admin' if u.perfil == 'admin' else 'Funcionário' }}
+            </span>
+          </td>
+          <td>{{ u.criado_em.strftime('%d/%m/%Y') }}</td>
+          <td>
+            {% if u.id != session.get('usuario_id') %}
+            <form method="POST" action="{{ url_for('excluir_usuario', id=u.id) }}"
+                  onsubmit="return confirm('Excluir este usuário?')">
+              <button type="submit" class="action-btn action-delete">🗑</button>
+            </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

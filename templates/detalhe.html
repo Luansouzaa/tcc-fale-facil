@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}{{ feedback.titulo }} — Fale Fácil{% endblock %}
+
+{% block content %}
+<div class="detail-page">
+  <div class="detail-header">
+    <a href="{{ url_for('index') }}" class="back-link">← Voltar</a>
+    <div class="detail-actions">
+    </div>
+  </div>
+
+  <article class="detail-card">
+    <div class="detail-tags">
+      <span class="tag tag-{{ feedback.categoria | lower }}">{{ feedback.categoria }}</span>
+      <span class="tag tag-prio-{{ feedback.prioridade | lower }}">{{ feedback.prioridade }}</span>
+      <span class="status-pill status-{{ feedback.status | lower | replace(' ','_') }}">{{ feedback.status }}</span>
+    </div>
+
+    <h1 class="detail-title">{{ feedback.titulo }}</h1>
+
+    <div class="detail-meta-grid">
+      <div class="meta-item">
+        <span class="meta-label">Enviado por</span>
+        <span class="meta-value">
+          {% if feedback.anonimo %}🔒 Anônimo{% else %}{{ feedback.funcionario }}{% endif %}
+        </span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Departamento</span>
+        <span class="meta-value">
+          {% if feedback.anonimo %}—{% else %}{{ feedback.departamento }}{% endif %}
+        </span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Cadastrado em</span>
+        <span class="meta-value">{{ feedback.criado_em.strftime('%d/%m/%Y às %H:%M') }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Atualizado em</span>
+        <span class="meta-value">{{ feedback.atualizado_em.strftime('%d/%m/%Y às %H:%M') }}</span>
+      </div>
+    </div>
+
+    <div class="detail-description">
+      <h3>Descrição</h3>
+      <p>{{ feedback.descricao }}</p>
+    </div>
+  </article>
+</div>
+{% endblock %}

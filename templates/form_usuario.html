@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Novo Usuário — Fale Fácil{% endblock %}
+
+{% block content %}
+<div class="form-page">
+  <div class="form-header">
+    <a href="{{ url_for('usuarios') }}" class="back-link">← Voltar</a>
+    <h2>Novo Usuário</h2>
+  </div>
+
+  <form method="POST" style="display:flex; flex-direction:column; gap:1.1rem;">
+    <div class="form-grid">
+      <div class="field">
+        <label>Nome *</label>
+        <input type="text" name="nome" value="{{ dados.get('nome', '') }}" placeholder="Nome completo" required />
+      </div>
+      <div class="field">
+        <label>Email *</label>
+        <input type="email" name="email" value="{{ dados.get('email', '') }}" placeholder="email@empresa.com" required />
+      </div>
+      <div class="field">
+        <label>Senha *</label>
+        <input type="password" name="senha" placeholder="Mínimo 6 caracteres" required />
+      </div>
+      <div class="field">
+        <label>Perfil</label>
+        <select name="perfil">
+          <option value="funcionario" {% if dados.get('perfil','funcionario') == 'funcionario' %}selected{% endif %}>Funcionário</option>
+          <option value="admin" {% if dados.get('perfil') == 'admin' %}selected{% endif %}>Administrador</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <a href="{{ url_for('usuarios') }}" class="btn btn-ghost">Cancelar</a>
+      <button type="submit" class="btn btn-primary">Criar Usuário</button>
+    </div>
+  </form>
+</div>
+{% endblock %}
