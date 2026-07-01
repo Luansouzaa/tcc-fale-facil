@@ -103,3 +103,8 @@ Resultado esperado: Erro de banco não encontrado
 Resultado obtido: Erro Unknown database 'fale_facil_db' exibido
 Solução: Banco criado via MySQL Workbench com o script SQL
 Status: ✅ Resolvido
+
+
+FIGMA/LINK
+
+https://www.figma.com/design/L8o38XtrvHYUE1AShIRWcP/FALE-F%C3%81CIL?m=dev&t=fH4FEngC3WYDtI5k-1
